@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     Alert,
     FlatList,
@@ -20,7 +20,7 @@ type Book = {
     title: string;
     author: string;
     description?: string;
-    photo: string; // base64 encoded
+    photo: string;
     addedDate: string;
 };
 
@@ -28,14 +28,14 @@ export default function LibraryScreen() {
     const [books, setBooks] = useState<Book[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [cameraVisible, setCameraVisible] = useState(false);
+    const [cameraReady, setCameraReady] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
     const [newTitle, setNewTitle] = useState('');
     const [newAuthor, setNewAuthor] = useState('');
     const [newDescription, setNewDescription] = useState('');
     const [photo, setPhoto] = useState<string | null>(null);
-    const [cameraRef, setCameraRef] = useState<any>(null);
+    const cameraRef = useRef<any>(null);
 
-    // Lataa kirjat sovelluksen käynnistämisen yhteydessä
     useEffect(() => {
         loadBooks();
     }, []);
@@ -60,25 +60,42 @@ export default function LibraryScreen() {
         }
     };
 
-    const takePicture = async () => {
+    const handleOpenCamera = async () => {
         if (!permission?.granted) {
             const result = await requestPermission();
+
             if (!result.granted) {
                 Alert.alert('Virhe', 'Kamera-oikeuksia tarvitaan kuvan ottamiseen');
                 return;
             }
         }
 
-        if (cameraRef) {
-            try {
-                const photo = await cameraRef.takePictureAsync({ base64: true });
-                if (photo.base64) {
-                    setPhoto(`data:image/jpg;base64,${photo.base64}`);
-                    setCameraVisible(false);
-                }
-            } catch (error) {
-                console.error('Virhe kuvan ottamisessa:', error);
+        setCameraReady(false);
+        setCameraVisible(true);
+    };
+
+    const handleCloseCamera = () => {
+        setCameraVisible(false);
+        setCameraReady(false);
+    };
+
+    const takePicture = async () => {
+        if (!cameraRef.current || !cameraReady) {
+            return;
+        }
+
+        try {
+            const capturedPhoto = await cameraRef.current.takePictureAsync({ base64: true });
+
+            if (capturedPhoto.base64) {
+                setPhoto(`data:image/jpg;base64,${capturedPhoto.base64}`);
+            } else {
+                setPhoto(capturedPhoto.uri);
             }
+
+            setCameraVisible(false);
+        } catch (error) {
+            console.error('Virhe kuvan ottamisessa:', error);
         }
     };
 
@@ -181,100 +198,100 @@ export default function LibraryScreen() {
                 visible={modalVisible}
                 animationType="slide"
                 transparent={true}
-                onRequestClose={resetModal}
+                onRequestClose={cameraVisible ? handleCloseCamera : resetModal}
             >
                 <View style={styles.modalContainer}>
-                    <ScrollView style={styles.modalContent}>
-                        <TouchableOpacity
-                            style={styles.closeButton}
-                            onPress={resetModal}
-                        >
-                            <Ionicons name="close" size={24} color="#D1F0FD" />
-                        </TouchableOpacity>
+                    {cameraVisible ? (
+                        <View style={styles.cameraScreen}>
+                            <CameraView
+                                ref={cameraRef}
+                                style={styles.camera}
+                                facing="back"
+                                onCameraReady={() => setCameraReady(true)}
+                            />
 
-                        <Text style={styles.modalTitle}>Lisää kirja kirjastoon</Text>
-
-                        {photo ? (
-                            <View style={styles.photoPreview}>
-                                <Image source={{ uri: photo }} style={styles.previewImage} />
+                            <View style={styles.cameraControlsOverlay}>
                                 <TouchableOpacity
-                                    style={styles.retakeButton}
-                                    onPress={() => setCameraVisible(true)}
+                                    style={styles.cameraCancelButton}
+                                    onPress={handleCloseCamera}
                                 >
-                                    <Ionicons name="camera" size={20} color="#D1F0FD" />
-                                    <Text style={styles.retakeButtonText}>Ota uusi kuva</Text>
+                                    <Ionicons name="close" size={28} color="#D1F0FD" />
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.cameraShutterButton}
+                                    onPress={takePicture}
+                                    disabled={!cameraReady}
+                                >
+                                    <Ionicons name="camera" size={32} color="#D1F0FD" />
+                                </TouchableOpacity>
+                                <View style={{ width: 50 }} />
                             </View>
-                        ) : (
+                        </View>
+                    ) : (
+                        <ScrollView style={styles.modalContent}>
                             <TouchableOpacity
-                                style={styles.cameraButton}
-                                onPress={() => setCameraVisible(true)}
+                                style={styles.closeButton}
+                                onPress={resetModal}
                             >
-                                <Ionicons name="camera" size={32} color="#D1F0FD" />
-                                <Text style={styles.cameraButtonText}>Ota kuva kirjasta</Text>
+                                <Ionicons name="close" size={24} color="#D1F0FD" />
                             </TouchableOpacity>
-                        )}
 
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Kirjan otsikko"
-                            placeholderTextColor="#8B8980"
-                            value={newTitle}
-                            onChangeText={setNewTitle}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Kirjoittaja"
-                            placeholderTextColor="#8B8980"
-                            value={newAuthor}
-                            onChangeText={setNewAuthor}
-                        />
-                        <TextInput
-                            style={[styles.input, styles.descriptionInput]}
-                            placeholder="Kuvaus (valinnainen)"
-                            placeholderTextColor="#8B8980"
-                            value={newDescription}
-                            onChangeText={setNewDescription}
-                            multiline={true}
-                            numberOfLines={4}
-                        />
+                            <Text style={styles.modalTitle}>Lisää kirja kirjastoon</Text>
 
-                        <TouchableOpacity
-                            style={styles.submitButton}
-                            onPress={addBook}
-                        >
-                            <Text style={styles.submitButtonText}>Lisää kirja</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                            {photo ? (
+                                <View style={styles.photoPreview}>
+                                    <Image source={{ uri: photo }} style={styles.previewImage} />
+                                    <TouchableOpacity
+                                        style={styles.retakeButton}
+                                        onPress={handleOpenCamera}
+                                    >
+                                        <Ionicons name="camera" size={20} color="#D1F0FD" />
+                                        <Text style={styles.retakeButtonText}>Ota uusi kuva</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ) : (
+                                <TouchableOpacity
+                                    style={styles.cameraButton}
+                                    onPress={handleOpenCamera}
+                                >
+                                    <Ionicons name="camera" size={32} color="#D1F0FD" />
+                                    <Text style={styles.cameraButtonText}>Ota kuva kirjasta</Text>
+                                </TouchableOpacity>
+                            )}
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Kirjan otsikko"
+                                placeholderTextColor="#8B8980"
+                                value={newTitle}
+                                onChangeText={setNewTitle}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Kirjoittaja"
+                                placeholderTextColor="#8B8980"
+                                value={newAuthor}
+                                onChangeText={setNewAuthor}
+                            />
+                            <TextInput
+                                style={[styles.input, styles.descriptionInput]}
+                                placeholder="Kuvaus (valinnainen)"
+                                placeholderTextColor="#8B8980"
+                                value={newDescription}
+                                onChangeText={setNewDescription}
+                                multiline={true}
+                                numberOfLines={4}
+                            />
+
+                            <TouchableOpacity
+                                style={styles.submitButton}
+                                onPress={addBook}
+                            >
+                                <Text style={styles.submitButtonText}>Lisää kirja</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
+                    )}
                 </View>
-            </Modal>
-
-            <Modal
-                visible={cameraVisible}
-                animationType="slide"
-                onRequestClose={() => setCameraVisible(false)}
-            >
-                <CameraView
-                    ref={setCameraRef}
-                    style={styles.camera}
-                    facing="back"
-                >
-                    <View style={styles.cameraControls}>
-                        <TouchableOpacity
-                            style={styles.cameraCancelButton}
-                            onPress={() => setCameraVisible(false)}
-                        >
-                            <Ionicons name="close" size={28} color="#D1F0FD" />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.cameraShutterButton}
-                            onPress={takePicture}
-                        >
-                            <Ionicons name="camera" size={32} color="#D1F0FD" />
-                        </TouchableOpacity>
-                        <View style={{ width: 50 }} />
-                    </View>
-                </CameraView>
             </Modal>
         </View>
     );
@@ -457,13 +474,22 @@ const styles = StyleSheet.create({
     camera: {
         flex: 1,
     },
-    cameraControls: {
+    cameraScreen: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: '#000000',
+    },
+    cameraControlsOverlay: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: 40,
         flexDirection: 'row',
         paddingHorizontal: 20,
+        zIndex: 10,
     },
     cameraCancelButton: {
         padding: 12,

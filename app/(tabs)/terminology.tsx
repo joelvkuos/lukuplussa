@@ -52,7 +52,6 @@ export default function TerminologyScreen() {
     };
 
     const loadCategories = () => {
-        // Hae kaikki kategoriat oletustermeistä
         const defaultCategories = Array.from(
             new Set(termsData.map((t) => t.category))
         ).sort();
