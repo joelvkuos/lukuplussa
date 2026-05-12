@@ -1,0 +1,302 @@
+[
+    {
+        "id": "1",
+        "term": "Utilitarismi",
+        "category": "Filosofia",
+        "definition": "Eettinen teoria, jonka mukaan moraalisesti oikea teko on se, joka tuottaa mahdollisimman paljon hyvinvointia mahdollisimman monelle."
+    },
+    {
+        "id": "2",
+        "term": "Deontologia",
+        "category": "Filosofia",
+        "definition": "Eettinen teoria, jonka mukaan teon moraalisuus perustuu velvollisuuksiin ja sääntöihin eikä teon seurauksiin."
+    },
+    {
+        "id": "3",
+        "term": "Empirismi",
+        "category": "Filosofia",
+        "definition": "Tietoteoria, jonka mukaan tieto perustuu ensisijaisesti kokemukseen ja havaintoihin."
+    },
+    {
+        "id": "4",
+        "term": "Rationalismi",
+        "category": "Filosofia",
+        "definition": "Tietoteoria, jonka mukaan järki ja looginen ajattelu ovat keskeisiä tiedon lähteitä."
+    },
+    {
+        "id": "5",
+        "term": "Eksistentialismi",
+        "category": "Filosofia",
+        "definition": "Filosofinen suuntaus, joka korostaa yksilön vapautta, vastuuta ja elämän merkityksen luomista omien valintojen kautta."
+    },
+    {
+        "id": "6",
+        "term": "Nihilismi",
+        "category": "Filosofia",
+        "definition": "Ajattelutapa, jonka mukaan elämällä ei ole objektiivista merkitystä, arvoja tai tarkoitusta."
+    },
+    {
+        "id": "7",
+        "term": "Stoalaisuus",
+        "category": "Filosofia",
+        "definition": "Antiikin filosofinen oppi, joka korostaa järkeä, itsehillintää ja kykyä hyväksyä asiat, joita ei voi muuttaa."
+    },
+    {
+        "id": "8",
+        "term": "Relativismi",
+        "category": "Filosofia",
+        "definition": "Näkemys, jonka mukaan totuus tai moraali ei ole universaalia vaan riippuu kulttuurista, näkökulmasta tai tilanteesta."
+    },
+    {
+        "id": "9",
+        "term": "Determinismi",
+        "category": "Filosofia",
+        "definition": "Käsitys, jonka mukaan kaikki tapahtumat ovat syy-seuraussuhteiden määräämiä."
+    },
+    {
+        "id": "10",
+        "term": "Dualismi",
+        "category": "Filosofia",
+        "definition": "Näkemys, jonka mukaan todellisuus koostuu kahdesta perustavasta olemassaolon muodosta, kuten mielestä ja aineesta."
+    },
+    {
+        "id": "11",
+        "term": "Demokratia",
+        "category": "Yhteiskunta",
+        "definition": "Hallintomuoto, jossa poliittinen valta kuuluu kansalle ja sitä käytetään vaalien kautta."
+    },
+    {
+        "id": "12",
+        "term": "Autoritarismi",
+        "category": "Yhteiskunta",
+        "definition": "Hallintotapa, jossa valta on keskittynyt pienelle ryhmälle tai johtajalle ja kansalaisten poliittisia vapauksia rajoitetaan."
+    },
+    {
+        "id": "13",
+        "term": "Populismi",
+        "category": "Yhteiskunta",
+        "definition": "Poliittinen ajattelutapa, joka korostaa kansan ja eliitin välistä vastakkainasettelua."
+    },
+    {
+        "id": "14",
+        "term": "Nationalismi",
+        "category": "Yhteiskunta",
+        "definition": "Aate, joka korostaa kansakunnan yhtenäisyyttä, identiteettiä ja itsenäisyyttä."
+    },
+    {
+        "id": "15",
+        "term": "Liberalismi",
+        "category": "Yhteiskunta",
+        "definition": "Poliittinen ja filosofinen aate, joka korostaa yksilön vapautta, oikeuksia ja markkinataloutta."
+    },
+    {
+        "id": "16",
+        "term": "Sosialismi",
+        "category": "Yhteiskunta",
+        "definition": "Taloudellinen ja poliittinen oppi, joka korostaa yhteisomistusta, tasa-arvoa ja sosiaalista oikeudenmukaisuutta."
+    },
+    {
+        "id": "17",
+        "term": "Kapitalismi",
+        "category": "Yhteiskunta",
+        "definition": "Taloudellinen järjestelmä, jossa tuotantovälineet ovat pääosin yksityisessä omistuksessa ja markkinat ohjaavat taloutta."
+    },
+    {
+        "id": "18",
+        "term": "Ideologia",
+        "category": "Yhteiskunta",
+        "definition": "Järjestelmällinen kokoelma poliittisia tai yhteiskunnallisia ajatuksia ja arvoja."
+    },
+    {
+        "id": "19",
+        "term": "Propaganda",
+        "category": "Yhteiskunta",
+        "definition": "Tiedon tai viestien tarkoituksellinen levittäminen mielipiteiden ja asenteiden ohjaamiseksi."
+    },
+    {
+        "id": "20",
+        "term": "Sensuuri",
+        "category": "Yhteiskunta",
+        "definition": "Viranomaisten tai muiden tahojen harjoittama tiedon, julkaisujen tai ilmaisun rajoittaminen."
+    },
+    {
+        "id": "21",
+        "term": "Feodalismi",
+        "category": "Historia",
+        "definition": "Keskiaikainen yhteiskuntajärjestelmä, jossa maa ja valta jakautuivat läänityssuhteiden kautta."
+    },
+    {
+        "id": "22",
+        "term": "Renessanssi",
+        "category": "Historia",
+        "definition": "Euroopassa 1300–1600-luvuilla vaikuttanut kulttuurinen ja tieteellinen uudistumisen kausi."
+    },
+    {
+        "id": "23",
+        "term": "Valistus",
+        "category": "Historia",
+        "definition": "1700-luvun aatevirtaus, joka korosti järkeä, tiedettä ja yksilön vapautta."
+    },
+    {
+        "id": "24",
+        "term": "Teollinen vallankumous",
+        "category": "Historia",
+        "definition": "1700–1800-luvuilla tapahtunut taloudellinen ja teknologinen muutos, jossa tuotanto siirtyi käsityöstä teolliseen valmistukseen."
+    },
+    {
+        "id": "25",
+        "term": "Kolonialismi",
+        "category": "Historia",
+        "definition": "Politiikka, jossa valtio laajentaa valtaansa ja hallintaansa muiden alueiden ja kansojen yli."
+    },
+    {
+        "id": "26",
+        "term": "Imperialismi",
+        "category": "Historia",
+        "definition": "Valtion pyrkimys laajentaa valtaansa poliittisesti, taloudellisesti tai sotilaallisesti muiden alueiden yli."
+    },
+    {
+        "id": "27",
+        "term": "Totalitarismi",
+        "category": "Historia",
+        "definition": "Hallintomuoto, jossa valtio pyrkii hallitsemaan kaikkia yhteiskunnan osa-alueita."
+    },
+    {
+        "id": "28",
+        "term": "Kylmä sota",
+        "category": "Historia",
+        "definition": "Toisen maailmansodan jälkeinen poliittinen ja ideologinen vastakkainasettelu Yhdysvaltojen ja Neuvostoliiton välillä."
+    },
+    {
+        "id": "29",
+        "term": "Vallankumous",
+        "category": "Historia",
+        "definition": "Nopea ja perusteellinen poliittinen tai yhteiskunnallinen muutos."
+    },
+    {
+        "id": "30",
+        "term": "Kansallisvaltio",
+        "category": "Historia",
+        "definition": "Valtio, jonka rajat ja identiteetti perustuvat yhteiseen kansalliseen kulttuuriin tai kansaan."
+    },
+    {
+        "id": "31",
+        "term": "Platonismi",
+        "category": "Filosofia",
+        "definition": "Platonin filosofiaan perustuva ajattelutapa, joka korostaa ideoiden tai muotojen maailmaa todellisen tiedon lähteenä."
+    },
+    {
+        "id": "32",
+        "term": "Aristotelismi",
+        "category": "Filosofia",
+        "definition": "Aristoteleen filosofiaan perustuva ajattelutapa, joka korostaa havaintoa, logiikkaa ja luonnon tutkimista tiedon perustana."
+    },
+    {
+        "id": "33",
+        "term": "Humanismi",
+        "category": "Filosofia",
+        "definition": "Ajattelutapa, joka korostaa ihmisen arvoa, järkeä ja kykyä ratkaista ongelmia ilman yliluonnollisia selityksiä."
+    },
+    {
+        "id": "34",
+        "term": "Pragmatismi",
+        "category": "Filosofia",
+        "definition": "Filosofinen suuntaus, jonka mukaan ajatusten ja teorioiden arvo määräytyy niiden käytännöllisten seurausten perusteella."
+    },
+    {
+        "id": "35",
+        "term": "Materialismi",
+        "category": "Filosofia",
+        "definition": "Näkemys, jonka mukaan todellisuus koostuu pohjimmiltaan aineesta ja kaikki ilmiöt voidaan selittää materiaalisilla prosesseilla."
+    },
+    {
+        "id": "36",
+        "term": "Idealismi",
+        "category": "Filosofia",
+        "definition": "Filosofinen näkemys, jonka mukaan todellisuuden perimmäinen luonne on henkinen tai ajatuksellinen."
+    },
+    {
+        "id": "37",
+        "term": "Agnostismi",
+        "category": "Filosofia",
+        "definition": "Näkemys, jonka mukaan jumalan tai yliluonnollisen olemassaolosta ei voida saada varmaa tietoa."
+    },
+    {
+        "id": "38",
+        "term": "Ateismi",
+        "category": "Filosofia",
+        "definition": "Näkemys, jonka mukaan jumalia ei ole olemassa."
+    },
+    {
+        "id": "39",
+        "term": "Skeptisismi",
+        "category": "Filosofia",
+        "definition": "Filosofinen asenne, joka korostaa tiedon epävarmuutta ja kyseenalaistaa varmat väitteet todellisuudesta."
+    },
+    {
+        "id": "40",
+        "term": "Teleologia",
+        "category": "Filosofia",
+        "definition": "Ajattelutapa, jossa ilmiöitä selitetään niiden tarkoituksen tai päämäärän kautta."
+    },
+    {
+        "id": "41",
+        "term": "Tasavalta",
+        "category": "Yhteiskunta",
+        "definition": "Valtiomuoto, jossa valtionpäämies ei ole perinnöllinen monarkki vaan valitaan määräajaksi."
+    },
+    {
+        "id": "42",
+        "term": "Monarkia",
+        "category": "Yhteiskunta",
+        "definition": "Hallintomuoto, jossa valtionpäämiehenä toimii perinnöllinen hallitsija, kuten kuningas tai kuningatar."
+    },
+    {
+        "id": "43",
+        "term": "Globalisaatio",
+        "category": "Yhteiskunta",
+        "definition": "Prosessi, jossa taloudet, kulttuurit ja yhteiskunnat integroituvat yhä tiiviimmin maailmanlaajuisesti."
+    },
+    {
+        "id": "44",
+        "term": "Kansalaisyhteiskunta",
+        "category": "Yhteiskunta",
+        "definition": "Yhteiskunnan osa, joka koostuu vapaaehtoisista järjestöistä, yhdistyksistä ja kansalaisten toiminnasta valtion ulkopuolella."
+    },
+    {
+        "id": "45",
+        "term": "Oikeusvaltio",
+        "category": "Yhteiskunta",
+        "definition": "Periaate, jonka mukaan valtiovalta toimii lakien mukaisesti ja kansalaisten oikeudet ovat turvattuja."
+    },
+    {
+        "id": "46",
+        "term": "Antiikki",
+        "category": "Historia",
+        "definition": "Historiallinen ajanjakso, joka kattaa muinaisen Kreikan ja Rooman kulttuurit ennen keskiaikaa."
+    },
+    {
+        "id": "47",
+        "term": "Keskiaika",
+        "category": "Historia",
+        "definition": "Euroopan historian ajanjakso antiikin ja uuden ajan välissä noin vuosina 500–1500."
+    },
+    {
+        "id": "48",
+        "term": "Uusi aika",
+        "category": "Historia",
+        "definition": "Historiallinen ajanjakso, joka alkoi renessanssista ja löytöretkistä ja johti modernin maailman syntyyn."
+    },
+    {
+        "id": "49",
+        "term": "Kansanäänestys",
+        "category": "Yhteiskunta",
+        "definition": "Menettely, jossa kansalaiset äänestävät suoraan jostakin poliittisesta kysymyksestä."
+    },
+    {
+        "id": "50",
+        "term": "Perustuslaki",
+        "category": "Yhteiskunta",
+        "definition": "Valtion tärkein laki, joka määrittelee hallinnon rakenteen ja kansalaisten perusoikeudet."
+    }
+]
