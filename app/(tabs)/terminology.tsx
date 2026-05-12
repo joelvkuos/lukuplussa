@@ -238,6 +238,15 @@ export default function TerminologyScreen() {
                             value={newTerm}
                             onChangeText={setNewTerm}
                         />
+                        <TextInput
+                            style={[styles.input, styles.definitionInput]}
+                            placeholder="Määritelmä"
+                            placeholderTextColor="#8B8980"
+                            value={newDefinition}
+                            onChangeText={setNewDefinition}
+                            multiline={true}
+                            numberOfLines={5}
+                        />
 
                         <Text style={styles.pickerLabel}>Valitse kategoria:</Text>
                         <View style={styles.pickerContainer}>
@@ -257,16 +266,6 @@ export default function TerminologyScreen() {
                                 ))}
                             </Picker>
                         </View>
-
-                        <TextInput
-                            style={[styles.input, styles.definitionInput]}
-                            placeholder="Määritelmä"
-                            placeholderTextColor="#8B8980"
-                            value={newDefinition}
-                            onChangeText={setNewDefinition}
-                            multiline={true}
-                            numberOfLines={6}
-                        />
 
                         <TouchableOpacity
                             style={styles.submitButton}
@@ -324,8 +323,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#67645E',
     },
     userTermCard: {
-        borderColor: '#FFD700',
-        backgroundColor: '#3d3c38',
+        borderColor: '#D1F0FD',
+        backgroundColor: '#67645E',
     },
     termHeader: {
         flexDirection: 'row',
