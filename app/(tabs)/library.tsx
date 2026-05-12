@@ -34,6 +34,7 @@ export default function LibraryScreen() {
     const [newAuthor, setNewAuthor] = useState('');
     const [newDescription, setNewDescription] = useState('');
     const [photo, setPhoto] = useState<string | null>(null);
+    const [editingId, setEditingId] = useState<string | null>(null);
     const cameraRef = useRef<any>(null);
 
     useEffect(() => {
@@ -99,25 +100,53 @@ export default function LibraryScreen() {
         }
     };
 
-    const addBook = async () => {
+    const addOrEditBook = async () => {
         if (!newTitle.trim() || !newAuthor.trim() || !photo) {
             Alert.alert('Virhe', 'Täytä otsikko, kirjoittaja ja ota kuva');
             return;
         }
 
-        const newBook: Book = {
-            id: Math.random().toString(36).substr(2, 9),
-            title: newTitle,
-            author: newAuthor,
-            description: newDescription,
-            photo: photo,
-            addedDate: new Date().toLocaleDateString('fi-FI'),
-        };
+        if (editingId) {
+            // Muokkaa olemassa olevaa kirjaa
+            const updatedBooks = books.map((book) =>
+                book.id === editingId
+                    ? {
+                        ...book,
+                        title: newTitle,
+                        author: newAuthor,
+                        description: newDescription,
+                        photo: photo,
+                    }
+                    : book
+            );
+            await saveBooks(updatedBooks);
+            Alert.alert('Onnistui', 'Kirja päivitetty');
+        } else {
+            // Lisää uusi kirja
+            const newBook: Book = {
+                id: Math.random().toString(36).substr(2, 9),
+                title: newTitle,
+                author: newAuthor,
+                description: newDescription,
+                photo: photo,
+                addedDate: new Date().toLocaleDateString('fi-FI'),
+            };
 
-        const updatedBooks = [...books, newBook];
-        await saveBooks(updatedBooks);
-        Alert.alert('Onnistui', 'Kirja lisätty kirjastoon');
+            const updatedBooks = [...books, newBook];
+            await saveBooks(updatedBooks);
+            Alert.alert('Onnistui', 'Kirja lisätty kirjastoon');
+        }
+
         resetModal();
+    };
+
+    const editBook = (book: Book) => {
+        setEditingId(book.id);
+        setNewTitle(book.title);
+        setNewAuthor(book.author);
+        setNewDescription(book.description || '');
+        setPhoto(book.photo);
+        setModalVisible(true);
     };
 
     const deleteBook = (id: string) => {
@@ -138,6 +167,7 @@ export default function LibraryScreen() {
         setNewAuthor('');
         setNewDescription('');
         setPhoto(null);
+        setEditingId(null);
         setModalVisible(false);
     };
 
@@ -161,7 +191,7 @@ export default function LibraryScreen() {
                 <FlatList
                     data={books}
                     keyExtractor={(item) => item.id}
-                    numColumns={2}
+                    numColumns={1}
                     contentContainerStyle={{ paddingBottom: 100, paddingTop: 10, padding: 8 }}
                     renderItem={({ item }) => (
                         <View style={styles.bookCard}>
@@ -183,6 +213,12 @@ export default function LibraryScreen() {
                                 )}
                                 <Text style={styles.bookDate}>{item.addedDate}</Text>
                             </View>
+                            <TouchableOpacity
+                                style={styles.editButton}
+                                onPress={() => editBook(item)}
+                            >
+                                <Ionicons name="pencil" size={18} color="#D1F0FD" />
+                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.deleteButton}
                                 onPress={() => deleteBook(item.id)}
@@ -236,7 +272,9 @@ export default function LibraryScreen() {
                                 <Ionicons name="close" size={24} color="#D1F0FD" />
                             </TouchableOpacity>
 
-                            <Text style={styles.modalTitle}>Lisää kirja kirjastoon</Text>
+                            <Text style={styles.modalTitle}>
+                                {editingId ? 'Muokkaa kirjaa' : 'Lisää kirja kirjastoon'}
+                            </Text>
 
                             {photo ? (
                                 <View style={styles.photoPreview}>
@@ -285,9 +323,11 @@ export default function LibraryScreen() {
 
                             <TouchableOpacity
                                 style={styles.submitButton}
-                                onPress={addBook}
+                                onPress={addOrEditBook}
                             >
-                                <Text style={styles.submitButtonText}>Lisää kirja</Text>
+                                <Text style={styles.submitButtonText}>
+                                    {editingId ? 'Tallenna muutokset' : 'Lisää kirja'}
+                                </Text>
                             </TouchableOpacity>
                         </ScrollView>
                     )}
@@ -374,6 +414,14 @@ const styles = StyleSheet.create({
         color: '#8B8980',
         fontSize: 10,
         marginTop: 6,
+    },
+    editButton: {
+        position: 'absolute',
+        top: 8,
+        right: 50,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        padding: 8,
+        borderRadius: 6,
     },
     deleteButton: {
         position: 'absolute',
