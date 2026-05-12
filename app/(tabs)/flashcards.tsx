@@ -59,11 +59,42 @@ export default function FlashcardsScreen() {
                     )}
                 </ScrollView>
 
+                {/* Jatka harjoittelua -painikki, näytetään vain jos on kesken oleva sessio */}
+                {flashcards.hasOngoingSession && (
+                    <>
+                        <TouchableOpacity
+                            style={styles.resumeButton}
+                            onPress={flashcards.resumeSession}
+                        >
+                            <Text style={styles.resumeButtonText}>
+                                Jatka harjoittelua ({flashcards.currentIndex + 1} / {flashcards.totalTerms})
+                            </Text>
+                        </TouchableOpacity>
+
+                        <View style={styles.ongoingStatsRow}>
+                            <View style={styles.ongoingStatItem}>
+                                <Text style={styles.ongoingStatLabel}>Oikein</Text>
+                                <Text style={[styles.ongoingStatValue, styles.correctColor]}>
+                                    {flashcards.correctCount}
+                                </Text>
+                            </View>
+                            <View style={styles.ongoingStatItem}>
+                                <Text style={styles.ongoingStatLabel}>Väärin</Text>
+                                <Text style={[styles.ongoingStatValue, styles.incorrectColor]}>
+                                    {flashcards.incorrectCount}
+                                </Text>
+                            </View>
+                        </View>
+                    </>
+                )}
+
                 <TouchableOpacity
                     style={styles.startButton}
                     onPress={flashcards.startSession}
                 >
-                    <Text style={styles.startButtonText}>Aloita harjoittelu</Text>
+                    <Text style={styles.startButtonText}>
+                        {flashcards.hasOngoingSession ? 'Aloita alusta' : 'Aloita harjoittelu'}
+                    </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -304,6 +335,50 @@ const styles = StyleSheet.create({
     startButtonText: {
         color: 'white',
         fontSize: 18,
+        fontWeight: 'bold',
+    },
+    // Jatka harjoittelua painikki
+    resumeButton: {
+        backgroundColor: '#3d3c38',
+        padding: 14,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginBottom: 12,
+        borderWidth: 2,
+        borderColor: '#D1F0FD',
+    },
+
+    resumeButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    // Kesken olevan sessio tilastot
+    ongoingStatsRow: {
+        flexDirection: 'row',
+        gap: 12,
+        marginBottom: 15,
+    },
+
+    ongoingStatItem: {
+        flex: 1,
+        backgroundColor: '#5A5954',
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#D1F0FD',
+    },
+
+    ongoingStatLabel: {
+        fontSize: 12,
+        color: '#D1F0FD',
+        marginBottom: 5,
+    },
+
+    ongoingStatValue: {
+        fontSize: 20,
         fontWeight: 'bold',
     },
 

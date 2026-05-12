@@ -26,6 +26,7 @@ export const useFlashcards = (allTerms: Term[]) => {
         isSessionActive: false,
     });
 
+    // Aloita uusi sessio - nollaa tilastot
     const startSession = useCallback(() => {
         const shuffled = [...allTerms].sort(() => Math.random() - 0.5);
         setState((prev) => ({
@@ -38,6 +39,15 @@ export const useFlashcards = (allTerms: Term[]) => {
             incorrectCount: 0,
         }));
     }, [allTerms]);
+
+    // Jatka aiemmalla sessio - säilytä tilastot ja jatka indeksistä
+    const resumeSession = useCallback(() => {
+        setState((prev) => ({
+            ...prev,
+            isSessionActive: true,
+            isFlipped: false,
+        }));
+    }, []);
 
     const flipCard = useCallback(() => {
         setState((prev) => ({
@@ -75,6 +85,12 @@ export const useFlashcards = (allTerms: Term[]) => {
         state.isSessionActive &&
         state.currentIndex >= state.sessionTerms.length;
 
+    // Tarkista onko harjoittelua keskeytetty (ei valmis, mutta ei aktiivinen)
+    const hasOngoingSession =
+        !state.isSessionActive &&
+        state.sessionTerms.length > 0 &&
+        state.currentIndex < state.sessionTerms.length;
+
     const currentCard =
         state.sessionTerms.length > 0
             ? state.sessionTerms[state.currentIndex]
@@ -83,12 +99,14 @@ export const useFlashcards = (allTerms: Term[]) => {
     return {
         ...state,
         startSession,
+        resumeSession,
         flipCard,
         markCorrect,
         markIncorrect,
         endSession,
         isSessionComplete,
         currentCard,
+        hasOngoingSession,
         progress:
             state.sessionTerms.length > 0
                 ? ((state.currentIndex + 1) / state.sessionTerms.length) * 100
