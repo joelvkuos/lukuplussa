@@ -259,13 +259,21 @@ const styles = StyleSheet.create({
     },
 
     // ALOITUS NÄKYMÄ
+    startScrollContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 30,
+    },
+
     title: {
         fontSize: 28,
         fontWeight: 'bold',
         color: '#D1F0FD',
         marginBottom: 30,
+        marginTop: 80,
         textAlign: 'center',
     },
+
 
     statsContainer: {
         backgroundColor: '#3d3c38',
@@ -292,7 +300,7 @@ const styles = StyleSheet.create({
     categoriesContainer: {
         flex: 1,
         marginBottom: 20,
-        maxHeight: 300,
+        maxHeight: 200,
     },
 
     categoriesTitle: {
@@ -383,6 +391,7 @@ const styles = StyleSheet.create({
     },
 
     // HARJOITTELU-NÄKYMÄ
+
     sessionContainer: {
         flex: 1,
         backgroundColor: '#67645E',
@@ -400,6 +409,7 @@ const styles = StyleSheet.create({
 
     progressContainer: {
         marginBottom: 20,
+        marginTop: 80,
     },
 
     progressText: {
