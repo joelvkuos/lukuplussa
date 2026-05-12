@@ -1,7 +1,38 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useCallback, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+interface Quote {
+  id: string;
+  text: string;
+  author: string;
+}
+
 export default function HomeScreen() {
+  const [quote, setQuote] = useState<Quote | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadRandomQuote = () => {
+        try {
+          const quotes: Quote[] = require('../../src/data/quotes.json');
+          const randomIndex = Math.floor(Math.random() * quotes.length);
+          setQuote(quotes[randomIndex]);
+        } catch (error) {
+          console.error('Virhe sitaattien lataamisessa:', error);
+          setQuote({
+            id: '0',
+            text: 'Oppiminen on elämän paras seikkailu.',
+            author: 'Tuntematon'
+          });
+        }
+      };
+
+      loadRandomQuote();
+    }, [])
+  );
+
   return (
     <LinearGradient
       colors={['#67645E', '#3d3c38']}
@@ -10,14 +41,15 @@ export default function HomeScreen() {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Luku⁺</Text>
       </View>
-      <View style={styles.quoteContainer}>
-        <Text style={styles.quote}>
-          "Don't walk in front of me… I may not follow.
-          Don't walk behind me… I may not lead.
-          Walk beside me… just be my friend."
-        </Text>
-      </View>
-      <Text style={styles.text}>Albert Camus</Text>
+
+      {quote && (
+        <View style={styles.quoteContainer}>
+          <Text style={styles.quote}>
+            "{quote.text}"
+          </Text>
+          <Text style={styles.author}>— {quote.author}</Text>
+        </View>
+      )}
     </LinearGradient>
   );
 }
@@ -46,16 +78,21 @@ const styles = StyleSheet.create({
     color: '#D1F0FD'
   },
   quoteContainer: {
-    marginTop: 20,
+    marginTop: 40,
+    paddingHorizontal: 20,
   },
   quote: {
     fontSize: 16,
-    textAlign: 'left',
+    textAlign: 'center',
     color: '#D1F0FD',
+    lineHeight: 24,
+    marginBottom: 16,
+    fontStyle: 'italic',
   },
-  text: {
-    marginTop: 20,
+  author: {
     fontSize: 14,
     color: '#D1F0FD',
+    textAlign: 'center',
+    opacity: 0.8,
   }
 });
