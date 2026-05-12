@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
@@ -32,6 +33,7 @@ export default function FlashcardsScreen() {
         loadTerms();
     }, []);
 
+    // ALOITUS NÄKYMÄ
     if (!flashcards.isSessionActive) {
         return (
             <View style={styles.container}>
@@ -67,6 +69,7 @@ export default function FlashcardsScreen() {
         );
     }
 
+    // VALMISTUMIS NÄKYMÄ
     if (flashcards.isSessionComplete) {
         const total = flashcards.correctCount + flashcards.incorrectCount;
         const percentage =
@@ -75,130 +78,145 @@ export default function FlashcardsScreen() {
                 : 0;
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Harjoittelu valmis! 🎉</Text>
-
-                <View style={styles.resultContainer}>
-                    <View style={styles.resultBox}>
-                        <Text style={styles.resultLabel}>Oikein</Text>
-                        <Text style={[styles.resultNumber, styles.correctColor]}>
-                            {flashcards.correctCount}
-                        </Text>
-                    </View>
-
-                    <View style={styles.resultBox}>
-                        <Text style={styles.resultLabel}>Väärin</Text>
-                        <Text style={[styles.resultNumber, styles.incorrectColor]}>
-                            {flashcards.incorrectCount}
-                        </Text>
-                    </View>
-
-                    <View style={styles.resultBox}>
-                        <Text style={styles.resultLabel}>Osuus</Text>
-                        <Text style={styles.resultNumber}>{percentage}%</Text>
-                    </View>
-                </View>
-
-                <TouchableOpacity
-                    style={styles.restartButton}
-                    onPress={flashcards.startSession}
+            <SafeAreaView style={styles.container}>
+                <ScrollView
+                    style={styles.scrollContent}
+                    contentContainerStyle={styles.resultScrollContainer}
+                    showsVerticalScrollIndicator={true}
                 >
-                    <Text style={styles.restartButtonText}>Harjoittele uudelleen</Text>
-                </TouchableOpacity>
+                    <Text style={styles.title}>Harjoittelu valmis!</Text>
 
-                <TouchableOpacity
-                    style={styles.homeButton}
-                    onPress={flashcards.endSession}
-                >
-                    <Text style={styles.homeButtonText}>Takaisin</Text>
-                </TouchableOpacity>
-            </View>
+                    <View style={styles.resultContainerBox}>
+                        <View style={styles.resultBox}>
+                            <Text style={styles.resultLabel}>Oikein</Text>
+                            <Text style={[styles.resultNumber, styles.correctColor]}>
+                                {flashcards.correctCount}
+                            </Text>
+                        </View>
+
+                        <View style={styles.resultBox}>
+                            <Text style={styles.resultLabel}>Väärin</Text>
+                            <Text style={[styles.resultNumber, styles.incorrectColor]}>
+                                {flashcards.incorrectCount}
+                            </Text>
+                        </View>
+
+                        <View style={styles.resultBox}>
+                            <Text style={styles.resultLabel}>Osuus</Text>
+                            <Text style={styles.resultNumber}>{percentage}%</Text>
+                        </View>
+                    </View>
+
+
+
+                    <TouchableOpacity
+                        style={styles.restartButton}
+                        onPress={flashcards.startSession}
+                    >
+                        <Text style={styles.restartButtonText}>Harjoittele uudelleen</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.homeButton}
+                        onPress={flashcards.endSession}
+                    >
+                        <Text style={styles.homeButtonText}>Takaisin</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 
+    // HARJOITTELU-NÄKYMÄ
     return (
-        <View style={styles.container}>
-            <View style={styles.progressContainer}>
-                <Text style={styles.progressText}>
-                    {flashcards.currentIndex + 1} / {flashcards.totalTerms}
-                </Text>
-                <View style={styles.progressBar}>
-                    <View
-                        style={[
-                            styles.progressFill,
-                            { width: `${flashcards.progress}%` },
-                        ]}
-                    />
-                </View>
-            </View>
-
-            <View style={styles.sessionStats}>
-                <View style={styles.statItem}>
-                    <Text style={styles.statLabel}>Oikein</Text>
-                    <Text style={[styles.statValue, styles.correctColor]}>
-                        {flashcards.correctCount}
-                    </Text>
-                </View>
-                <View style={styles.statItem}>
-                    <Text style={styles.statLabel}>Väärin</Text>
-                    <Text style={[styles.statValue, styles.incorrectColor]}>
-                        {flashcards.incorrectCount}
-                    </Text>
-                </View>
-            </View>
-
-            {flashcards.currentCard && (
-                <TouchableOpacity
-                    style={[
-                        styles.card,
-                        flashcards.isFlipped && styles.cardFlipped,
-                    ]}
-                    onPress={flashcards.flipCard}
-                    activeOpacity={0.8}
-                >
-                    <Text style={styles.cardLabel}>
-                        {flashcards.isFlipped ? 'Määritelmä' : 'Termi'}
-                    </Text>
-
-                    <Text style={styles.cardText}>
-                        {flashcards.isFlipped
-                            ? flashcards.currentCard.definition
-                            : flashcards.currentCard.term}
-                    </Text>
-
-                    <Text style={styles.cardCategory}>
-                        {flashcards.currentCard.category}
-                    </Text>
-
-                    <Text style={styles.flipHint}>
-                        {flashcards.isFlipped ? 'Paina käännettäväksi' : 'Paina nähdäksesi vastaus'}
-                    </Text>
-                </TouchableOpacity>
-            )}
-
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={[styles.responseButton, styles.incorrectButton]}
-                    onPress={flashcards.markIncorrect}
-                >
-                    <Text style={styles.buttonText}>En osaa</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={[styles.responseButton, styles.correctButton]}
-                    onPress={flashcards.markCorrect}
-                >
-                    <Text style={styles.buttonText}>Osaan</Text>
-                </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-                style={styles.endSessionButton}
-                onPress={flashcards.endSession}
+        <SafeAreaView style={styles.sessionContainer}>
+            <ScrollView
+                style={styles.scrollContent}
+                contentContainerStyle={styles.scrollContentContainer}
+                showsVerticalScrollIndicator={true}
             >
-                <Text style={styles.endSessionButtonText}>Lopeta harjoittelu</Text>
-            </TouchableOpacity>
-        </View>
+                <View style={styles.progressContainer}>
+                    <Text style={styles.progressText}>
+                        {flashcards.currentIndex + 1} / {flashcards.totalTerms}
+                    </Text>
+                    <View style={styles.progressBar}>
+                        <View
+                            style={[
+                                styles.progressFill,
+                                { width: `${flashcards.progress}%` },
+                            ]}
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.sessionStats}>
+                    <View style={styles.statItem}>
+                        <Text style={styles.statLabel}>Oikein</Text>
+                        <Text style={[styles.statValue, styles.correctColor]}>
+                            {flashcards.correctCount}
+                        </Text>
+                    </View>
+                    <View style={styles.statItem}>
+                        <Text style={styles.statLabel}>Väärin</Text>
+                        <Text style={[styles.statValue, styles.incorrectColor]}>
+                            {flashcards.incorrectCount}
+                        </Text>
+                    </View>
+                </View>
+
+                {flashcards.currentCard && (
+                    <TouchableOpacity
+                        style={[
+                            styles.card,
+                            flashcards.isFlipped && styles.cardFlipped,
+                        ]}
+                        onPress={flashcards.flipCard}
+                        activeOpacity={0.8}
+                    >
+                        <Text style={styles.cardLabel}>
+                            {flashcards.isFlipped ? 'Määritelmä' : 'Termi'}
+                        </Text>
+
+                        <Text style={styles.cardText}>
+                            {flashcards.isFlipped
+                                ? flashcards.currentCard.definition
+                                : flashcards.currentCard.term}
+                        </Text>
+
+                        <Text style={styles.cardCategory}>
+                            {flashcards.currentCard.category}
+                        </Text>
+
+                        <Text style={styles.flipHint}>
+                            {flashcards.isFlipped ? 'Paina käännettäväksi' : 'Paina nähdäksesi vastaus'}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={[styles.responseButton, styles.incorrectButton]}
+                        onPress={flashcards.markIncorrect}
+                    >
+                        <Text style={styles.buttonText}>En osaa</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.responseButton, styles.correctButton]}
+                        onPress={flashcards.markCorrect}
+                    >
+                        <Text style={styles.buttonText}>Osaan</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity
+                    style={styles.endSessionButton}
+                    onPress={flashcards.endSession}
+                >
+                    <Text style={styles.endSessionButtonText}>Lopeta harjoittelu</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -209,6 +227,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#67645E',
     },
 
+    // ALOITUS NÄKYMÄ
     title: {
         fontSize: 28,
         fontWeight: 'bold',
@@ -218,9 +237,11 @@ const styles = StyleSheet.create({
     },
 
     statsContainer: {
-        backgroundColor: '#5A5954',
+        backgroundColor: '#3d3c38',
         padding: 15,
         borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#D1F0FD',
         marginBottom: 20,
         alignItems: 'center',
     },
@@ -234,7 +255,7 @@ const styles = StyleSheet.create({
     statsValue: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#FFB6C1',
+        color: '#D1F0FD',
     },
 
     categoriesContainer: {
@@ -251,9 +272,11 @@ const styles = StyleSheet.create({
     },
 
     categoryItem: {
-        backgroundColor: '#5A5954',
+        backgroundColor: '#3d3c38',
         padding: 12,
         borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#D1F0FD',
         marginBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -268,7 +291,7 @@ const styles = StyleSheet.create({
 
     categoryCount: {
         fontSize: 14,
-        color: '#FFB6C1',
+        color: '#D1F0FD',
     },
 
     startButton: {
@@ -282,6 +305,22 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+
+    // HARJOITTELU-NÄKYMÄ
+    sessionContainer: {
+        flex: 1,
+        backgroundColor: '#67645E',
+    },
+
+    scrollContent: {
+        flex: 1,
+    },
+
+    scrollContentContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 30,
     },
 
     progressContainer: {
@@ -304,7 +343,7 @@ const styles = StyleSheet.create({
 
     progressFill: {
         height: '100%',
-        backgroundColor: '#FFB6C1',
+        backgroundColor: '#4CAF50',
     },
 
     sessionStats: {
@@ -343,7 +382,6 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        flex: 1,
         backgroundColor: '#5A5954',
         borderRadius: 15,
         padding: 20,
@@ -357,15 +395,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
+        minHeight: 250,
     },
 
     cardFlipped: {
-        borderColor: '#FFB6C1',
+        borderColor: '#D1F0FD',
     },
 
     cardLabel: {
         fontSize: 12,
-        color: '#FFB6C1',
+        color: '#D1F0FD',
         marginBottom: 10,
         fontWeight: '600',
         textTransform: 'uppercase',
@@ -430,6 +469,7 @@ const styles = StyleSheet.create({
         borderColor: '#D1F0FD',
         borderRadius: 8,
         alignItems: 'center',
+        marginBottom: 20,
     },
 
     endSessionButtonText: {
@@ -438,17 +478,22 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    resultContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        marginBottom: 30,
+    // VALMISTUMIS NÄKYMÄ
+    resultScrollContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 30,
+    },
+
+    resultContainerBox: {
+        marginBottom: 20,
+        gap: 12,
     },
 
     resultBox: {
         backgroundColor: '#5A5954',
         padding: 20,
         borderRadius: 12,
-        marginBottom: 15,
         alignItems: 'center',
     },
 
@@ -462,6 +507,22 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: '#D1F0FD',
+    },
+
+    resultSummary: {
+        backgroundColor: '#5A5954',
+        padding: 20,
+        borderRadius: 12,
+        marginBottom: 20,
+        borderLeftWidth: 4,
+        borderLeftColor: '#FFB6C1',
+    },
+
+    summaryText: {
+        fontSize: 16,
+        color: '#D1F0FD',
+        marginBottom: 10,
+        lineHeight: 22,
     },
 
     restartButton: {
