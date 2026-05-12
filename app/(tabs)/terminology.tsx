@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
 import {
     Alert,
@@ -31,9 +32,11 @@ export default function TerminologyScreen() {
     const [newDefinition, setNewDefinition] = useState('');
     const [newCategory, setNewCategory] = useState('');
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
         loadUserTerms();
+        loadCategories();
     }, []);
 
     const loadUserTerms = async () => {
@@ -48,10 +51,19 @@ export default function TerminologyScreen() {
         }
     };
 
+    const loadCategories = () => {
+        // Hae kaikki kategoriat oletustermeistä
+        const defaultCategories = Array.from(
+            new Set(termsData.map((t) => t.category))
+        ).sort();
+        setCategories(defaultCategories);
+    };
+
     const saveUserTerms = async (terms: Term[]) => {
         try {
             const userTerms = terms.filter((t) => t.isUserAdded);
             await AsyncStorage.setItem('userTerms', JSON.stringify(userTerms));
+            loadCategories();
         } catch (error) {
             console.error('Virhe termien tallentamisessa:', error);
         }
@@ -227,13 +239,26 @@ export default function TerminologyScreen() {
                             value={newTerm}
                             onChangeText={setNewTerm}
                         />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Kategoria"
-                            placeholderTextColor="#8B8980"
-                            value={newCategory}
-                            onChangeText={setNewCategory}
-                        />
+
+                        <Text style={styles.pickerLabel}>Valitse kategoria:</Text>
+                        <View style={styles.pickerContainer}>
+                            <Picker
+                                selectedValue={newCategory}
+                                onValueChange={(itemValue: string) => setNewCategory(itemValue)}
+                                style={styles.picker}
+                                itemStyle={styles.pickerItem}
+                            >
+                                <Picker.Item label="Valitse kategoria..." value="" />
+                                {categories.map((category) => (
+                                    <Picker.Item
+                                        key={category}
+                                        label={category}
+                                        value={category}
+                                    />
+                                ))}
+                            </Picker>
+                        </View>
+
                         <TextInput
                             style={[styles.input, styles.definitionInput]}
                             placeholder="Määritelmä"
@@ -368,6 +393,27 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#D1F0FD',
         fontSize: 16,
+    },
+    pickerLabel: {
+        fontSize: 14,
+        color: '#D1F0FD',
+        marginBottom: 8,
+        fontWeight: 'bold',
+    },
+    pickerContainer: {
+        backgroundColor: '#67645E',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#D1F0FD',
+        marginBottom: 12,
+        overflow: 'hidden',
+    },
+    picker: {
+        color: '#D1F0FD',
+        backgroundColor: '#67645E',
+    },
+    pickerItem: {
+        color: '#D1F0FD',
     },
     definitionInput: {
         textAlignVertical: 'top',

@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
+
 import {
     SafeAreaView,
     ScrollView,
@@ -14,26 +17,35 @@ interface Term {
     term: string;
     category: string;
     definition: string;
+    isUserAdded?: boolean;
 }
 
 export default function FlashcardsScreen() {
     const [terms, setTerms] = useState<Term[]>([]);
     const flashcards = useFlashcards(terms);
 
-    useEffect(() => {
-        const loadTerms = async () => {
-            try {
-                const termsData = require('../../src/data/terms.json');
-                setTerms(termsData);
-            } catch (error) {
-                console.error('Virhe termien lataamisessa:', error);
-            }
-        };
+    useFocusEffect(
+        useCallback(() => {
+            const loadTerms = async () => {
+                try {
+                    const defaultTerms = require('../../src/data/terms.json');
+                    const stored = await AsyncStorage.getItem('userTerms');
+                    let userTerms: Term[] = [];
 
-        loadTerms();
-    }, []);
+                    if (stored) {
+                        userTerms = JSON.parse(stored);
+                    }
 
-    // ALOITUS NÄKYMÄ
+                    setTerms([...defaultTerms, ...userTerms]);
+                } catch (error) {
+                    console.error('Virhe termien lataamisessa:', error);
+                }
+            };
+
+            loadTerms();
+        }, [])
+    );
+
     if (!flashcards.isSessionActive) {
         return (
             <View style={styles.container}>
@@ -59,7 +71,6 @@ export default function FlashcardsScreen() {
                     )}
                 </ScrollView>
 
-                {/* Jatka harjoittelua -painikki, näytetään vain jos on kesken oleva sessio */}
                 {flashcards.hasOngoingSession && (
                     <>
                         <TouchableOpacity
@@ -100,7 +111,6 @@ export default function FlashcardsScreen() {
         );
     }
 
-    // VALMISTUMIS NÄKYMÄ
     if (flashcards.isSessionComplete) {
         const total = flashcards.correctCount + flashcards.incorrectCount;
         const percentage =
@@ -158,7 +168,6 @@ export default function FlashcardsScreen() {
         );
     }
 
-    // HARJOITTELU-NÄKYMÄ
     return (
         <SafeAreaView style={styles.sessionContainer}>
             <ScrollView
@@ -362,7 +371,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-    // Kesken olevan sessio tilastot
+    // Kesken olevan session tilastot
     ongoingStatsRow: {
         flexDirection: 'row',
         gap: 12,
